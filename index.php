@@ -66,3 +66,65 @@ $categories[] = [
     'produits' => []
 ];
 // $categories[] = $categorie;
+
+
+$nomValid = false;
+do {
+    $nomValid = true;
+    $nom = readline("Saisir le nom : ");
+    if (empty($nom)) {
+        echo "Nom obligatoire\n";
+        $nomValid = false;
+    }
+} while (!$nomValid);
+
+
+$refValid = false;
+do {
+    $refValid = true;
+    $reference = readline("Saisir la référence : ");
+    if (empty($reference)) {
+        echo "Référence obligatoire\n";
+        $refValid = false;
+    } else {
+        
+        foreach ($categories as $cat) {
+            foreach ($cat['produits'] as $prod) {
+                if ($prod['reference'] === $reference) {
+                    echo "Référence déjà existante\n";
+                    $refValid = false;
+                }
+            }
+        }
+    }
+} while (!$refValid);
+
+
+$prixValid = false;
+do {
+    $prixValid = true;
+    $prix = (int)readline("Saisir le prix : ");
+    if ($prix <= 0) {
+        echo "Prix doit être positif\n";
+        $prixValid = false;
+    }
+} while (!$prixValid);
+
+
+$quantiteValid = false;
+do {
+    $quantiteValid = true;
+    $quantite = (int)readline("Saisir la quantité : ");
+    if ($quantite <= 0) {
+        echo "Quantité doit être positive\n";
+        $quantiteValid = false;
+    }
+} while (!$quantiteValid);
+
+$categories[$index]['produits'][] = [
+    'nom'       => $nom,
+    'reference' => $reference,
+    'prix'      => $prix,
+    'quantite'  => $quantite
+];
+echo "Produit ajouté avec succès !\n";
