@@ -140,3 +140,66 @@ function ajouterProduit(array &$categories): void {
     ];
     echo "Produit ajouté avec succès !\n";
 }
+
+
+function ajouterCategorieAvecProduit(array &$categories): void {
+    $code = saisieChampObligatoireEtUnique($categories, "Saisir le code : ", "Code obligatoire", "code");
+    $nom = saisieChampObligatoireEtUnique($categories, "Saisir le nom : ", "Nom obligatoire", "nom");
+
+    $reponse = readline("Voulez-vous ajouter un produit ? (O/N) : ");
+
+    if (strtoupper($reponse) === "O") {
+        $nomProduit = saisieChampObligatoireEtUnique(
+            $categories,
+            "Nom du produit : ",
+            "Nom obligatoire",
+            "nom"
+        );
+
+        $refValid = false;
+        do {
+            $refValid = true;
+            $reference = readline("Référence : ");
+            if (empty($reference)) {
+                echo "Référence obligatoire\n";
+                $refValid = false;
+            } else {
+                foreach ($categories as $cat) {
+                    foreach ($cat['produits'] as $prod) {
+                        if ($prod['reference'] === $reference) {
+                            echo "Référence déjà existante\n";
+  $refValid = false;
+                        }
+                    }
+                }
+            }
+        } while (!$refValid);
+
+        $prix = saisiePositif("Prix : ");
+        $quantite = saisiePositif("Quantité : ");
+
+        $produit = [
+            'nom'       => $nomProduit,
+            'reference' => $reference,
+            'prix'      => $prix,
+            'quantite'  => $quantite
+        ];
+
+        $categories[] = [
+            'code'     => $code,
+            'nom'      => $nom,
+            'produits' => [$produit]
+        ];
+        echo "Catégorie avec produit ajoutée !\n";
+
+    } else {
+        echo "Ajout annulé !\n";
+    }
+}
+
+$categories = initialiserCategories();
+afficheCategorieSansProduit($categories);
+enregistrerCategorie($categories);
+ajouterProduit($categories);
+ajouterCategorieAvecProduit($categories);
+
