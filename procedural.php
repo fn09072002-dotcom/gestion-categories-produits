@@ -30,3 +30,53 @@ function afficheCategorieSansProduit(array $categories): void{
     }
  }
  afficheCategorieSansProduit($categories);
+
+function enregistrerCategorie(array &$categories): void {
+
+    
+    $codeValid = false;
+    do {
+        $codeValid = true;
+        $code = readline("Saisir le code : ");
+        if (empty($code)) {
+            echo "Code obligatoire\n";
+            $codeValid = false;
+        } else {
+            foreach ($categories as $categorie) {
+                if ($categorie['code'] === $code) {
+                    echo "Code existe déjà\n";
+                    $codeValid = false;  
+                }
+            }
+        }
+    } while (!$codeValid);
+
+    
+    $nomValid = false;
+    do {
+        $nomValid = true;
+        $nom = readline("Saisir le nom : ");
+        if (empty($nom)) {
+            echo "Nom obligatoire\n";
+            $nomValid = false;
+        } else {
+            foreach ($categories as $categorie) {
+                if ($categorie['nom'] === $nom) {
+                    echo "Nom existe déjà\n";
+                    $nomValid = false;
+                }
+            }
+        }
+    } while (!$nomValid);
+
+    
+    $categories[] = [
+        'code'     => $code,
+        'nom'      => $nom,
+        'produits' => []
+    ];
+    echo "Catégorie ajoutée !\n";
+}
+
+
+enregistrerCategorie($categories);
